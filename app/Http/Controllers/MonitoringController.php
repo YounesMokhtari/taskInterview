@@ -8,6 +8,7 @@ use App\Http\Resources\MonitoringCollection;
 use App\Http\Resources\MonitoringResource;
 use App\Models\Monitor;
 use App\Models\Monitoring;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -33,6 +34,9 @@ class MonitoringController extends Controller
     public function store(StoreMonitoringRequest $request): JsonResponse
     {
         $validatedMonitoringData = $request->validated();
+        $validatedMonitoringData+=[
+            'should_run_at'=>Carbon::now()->addMinutes($validatedMonitoringData['interval'])
+        ];
         $monitor = Monitor::query()
             ->create($validatedMonitoringData);
         return Response::json([

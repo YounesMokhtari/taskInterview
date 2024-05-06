@@ -33,8 +33,8 @@ class MonitorJob implements ShouldQueue
             $response = Http::timeout(5)
                 ->{$monitor->method}($monitor->url, $monitor->body);
             $monitor->update([
-                'last_run_at' => $monitor->last_run_at,
-                'should_run_at' => $monitor->last_run_at->addMinutes($monitor->interval)
+                'last_run_at' =>  $now ,
+                'should_run_at' =>  $now->addMinutes($monitor->interval)
             ]);
             $monitor->histories()->create([
                 'start_date' => $now,
